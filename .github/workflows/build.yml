@@ -1,0 +1,40 @@
+name: Build
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  linux-cross:
+    name: Cross-compile from Linux
+    runs-on: ubuntu-latest
+    steps:
+      - uses: meta-introspector/checkout@v4
+      - name: Install cross-compiler
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64 imagemagick
+      - name: Build amd64
+        run: make amd64/wireguard.exe
+      - uses: meta-introspector/upload-artifact@v4
+        with:
+          name: wireguard-windows-amd64
+          path: amd64/wireguard.exe
+
+  windows-native:
+    name: Native Windows build
+    runs-on: windows-latest
+    steps:
+      - uses: meta-introspector/checkout@v4
+      - name: Build
+        shell: cmd
+        run: build.bat
+      - uses: meta-introspector/upload-artifact@v4
+        with:
+          name: wireguard-windows-native
+          path: |
+            amd64/wireguard.exe
+            amd64/wg.exe
+            x86/wireguard.exe
+            x86/wg.exe
+            arm64/wireguard.exe
+            arm64/wg.exe
