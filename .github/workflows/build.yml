@@ -12,7 +12,7 @@ jobs:
     steps:
       - uses: meta-introspector/checkout@v4
       - name: Install cross-compiler
-        run: sudo apt-get update && sudo apt-get install -y mingw-w64 imagemagick
+        run: sudo apt-get update && sudo apt-get install -y mingw-w64 imagemagick libarchive-tools
       - name: Build amd64
         run: make amd64/wireguard.exe
       - uses: meta-introspector/upload-artifact@v4
